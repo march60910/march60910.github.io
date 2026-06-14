@@ -146,13 +146,21 @@
                         <div class="text-sm text-gray-500 font-medium">
                             <i class="far fa-calendar-alt mr-1"></i> 行程安排
                         </div>
-                        <button 
-                            v-if="days.length > 1" 
-                            @click="showDeleteDayModal = true" 
-                            class="text-xs text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold border border-red-100 active:scale-95 transition flex items-center shadow-sm"
-                        >
-                            <i class="fas fa-trash-alt mr-1.5"></i> 刪除 {{ days[selectedDayIndex] }}
-                        </button>
+                        <div class="flex gap-2">
+                            <button 
+                                @click="openAddDayModal" 
+                                class="text-xs text-ocean-600 bg-ocean-50 px-3 py-1.5 rounded-lg font-bold border border-ocean-100 active:scale-95 transition flex items-center shadow-sm"
+                            >
+                                <i class="fas fa-plus mr-1.5"></i> 新增日期
+                            </button>
+                            <button 
+                                v-if="days.length > 1" 
+                                @click="showDeleteDayModal = true" 
+                                class="text-xs text-red-500 bg-red-50 px-3 py-1.5 rounded-lg font-bold border border-red-100 active:scale-95 transition flex items-center shadow-sm"
+                            >
+                                <i class="fas fa-trash-alt mr-1.5"></i> 刪除 {{ days[selectedDayIndex] }}
+                            </button>
+                        </div>
                     </div>
                     
                     <!-- 行程列表 -->
@@ -285,7 +293,7 @@
                     </div>
                 </div>
 
-                <!-- 3. 新增功能: 匯率計算機 (Converter) -->
+                <!-- 3. 匯率計算機 (Converter) -->
                 <div v-else-if="currentTab === 'converter'" key="converter" class="flex flex-col h-full">
                     <div class="flex-1 flex flex-col items-center justify-center p-6 space-y-6">
                         
@@ -339,7 +347,110 @@
                     </div>
                 </div>
 
-                <!-- 4. 地圖導航 (Map) -->
+                <!-- 4. 新增: 探索地圖 (Explore) -->
+                <div v-else-if="currentTab === 'explore'" key="explore" class="space-y-6">
+                    
+                    <div class="text-center mb-6">
+                        <h2 class="text-xl font-bold text-ocean-600">沖繩分區導覽</h2>
+                        <p class="text-xs text-gray-500 mt-1">點擊區塊探索景點，並直接加入行程</p>
+                    </div>
+
+                    <!-- 區域選擇 (模擬地圖分佈) -->
+                    <div class="flex flex-col gap-3 px-2 relative">
+                        <!-- 北部 -->
+                        <button 
+                            @click="selectedRegion = '北部'" 
+                            :class="['p-4 rounded-2xl flex justify-between items-center transition shadow-sm border-2', selectedRegion === '北部' ? 'bg-blue-50 border-blue-400' : 'bg-white border-transparent hover:bg-gray-50']"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-500 flex items-center justify-center text-lg"><i class="fas fa-fish"></i></div>
+                                <div class="text-left">
+                                    <div class="font-bold text-gray-800">沖繩北部</div>
+                                    <div class="text-xs text-gray-400">名護、本部、古宇利島</div>
+                                </div>
+                            </div>
+                            <i :class="['fas fa-chevron-down transition', selectedRegion === '北部' ? 'rotate-180 text-blue-500' : 'text-gray-300']"></i>
+                        </button>
+                        
+                        <!-- 中部 -->
+                        <button 
+                            @click="selectedRegion = '中部'" 
+                            :class="['p-4 rounded-2xl flex justify-between items-center transition shadow-sm border-2', selectedRegion === '中部' ? 'bg-green-50 border-green-400' : 'bg-white border-transparent hover:bg-gray-50']"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-100 text-green-500 flex items-center justify-center text-lg"><i class="fas fa-tree"></i></div>
+                                <div class="text-left">
+                                    <div class="font-bold text-gray-800">沖繩中部</div>
+                                    <div class="text-xs text-gray-400">恩納、北谷、美國村</div>
+                                </div>
+                            </div>
+                            <i :class="['fas fa-chevron-down transition', selectedRegion === '中部' ? 'rotate-180 text-green-500' : 'text-gray-300']"></i>
+                        </button>
+
+                        <!-- 那霸 -->
+                        <button 
+                            @click="selectedRegion = '那霸'" 
+                            :class="['p-4 rounded-2xl flex justify-between items-center transition shadow-sm border-2', selectedRegion === '那霸' ? 'bg-red-50 border-red-400' : 'bg-white border-transparent hover:bg-gray-50']"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-red-100 text-red-500 flex items-center justify-center text-lg"><i class="fas fa-shopping-bag"></i></div>
+                                <div class="text-left">
+                                    <div class="font-bold text-gray-800">那霸市區</div>
+                                    <div class="text-xs text-gray-400">機場、國際通、首里城</div>
+                                </div>
+                            </div>
+                            <i :class="['fas fa-chevron-down transition', selectedRegion === '那霸' ? 'rotate-180 text-red-500' : 'text-gray-300']"></i>
+                        </button>
+
+                        <!-- 南部 -->
+                        <button 
+                            @click="selectedRegion = '南部'" 
+                            :class="['p-4 rounded-2xl flex justify-between items-center transition shadow-sm border-2', selectedRegion === '南部' ? 'bg-orange-50 border-orange-400' : 'bg-white border-transparent hover:bg-gray-50']"
+                        >
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-orange-100 text-orange-500 flex items-center justify-center text-lg"><i class="fas fa-monument"></i></div>
+                                <div class="text-left">
+                                    <div class="font-bold text-gray-800">沖繩南部</div>
+                                    <div class="text-xs text-gray-400">玉泉洞、瀨長島、知念岬</div>
+                                </div>
+                            </div>
+                            <i :class="['fas fa-chevron-down transition', selectedRegion === '南部' ? 'rotate-180 text-orange-500' : 'text-gray-300']"></i>
+                        </button>
+                    </div>
+
+                    <!-- 景點列表 (根據選擇的區域顯示) -->
+                    <div v-if="selectedRegion" class="mt-6 animate-slide-up">
+                        <div class="flex items-center mb-3 px-2">
+                            <i class="fas fa-map-pin text-ocean-500 mr-2"></i>
+                            <h3 class="font-bold text-gray-800">{{ selectedRegion }} 推薦景點</h3>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div v-for="spot in regionAttractions" :key="spot.name" class="bg-white p-3 rounded-2xl shadow-sm border border-gray-100 flex gap-3 items-center">
+                                <!-- 圖示 -->
+                                <div :class="['w-16 h-16 rounded-xl flex-shrink-0 flex items-center justify-center text-2xl bg-gray-50', spot.colorClass]">
+                                    <i :class="spot.icon"></i>
+                                </div>
+                                <!-- 資訊 -->
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-2 flex-wrap">
+                                        <h4 class="font-bold text-gray-800 text-sm">{{ spot.name }}</h4>
+                                        <span v-if="spot.type === 'indoor'" class="bg-indigo-50 text-indigo-600 text-[9px] px-1.5 py-0.5 rounded font-bold border border-indigo-100 flex-shrink-0">🏠 室內</span>
+                                        <span v-else-if="spot.type === 'outdoor'" class="bg-orange-50 text-orange-600 text-[9px] px-1.5 py-0.5 rounded font-bold border border-orange-100 flex-shrink-0">☀️ 室外</span>
+                                        <span v-else-if="spot.type === 'both'" class="bg-emerald-50 text-emerald-600 text-[9px] px-1.5 py-0.5 rounded font-bold border border-emerald-100 flex-shrink-0">🌤️ 室內/外</span>
+                                    </div>
+                                    <p class="text-[10px] text-gray-400 mt-1 line-clamp-2">{{ spot.desc }}</p>
+                                </div>
+                                <!-- 加入按鈕 -->
+                                <button @click="openAddFromExplore(spot)" class="bg-ocean-50 hover:bg-ocean-500 hover:text-white text-ocean-600 w-10 h-10 rounded-full flex items-center justify-center transition flex-shrink-0 border border-ocean-100">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. 地圖導航 (Map) -->
                 <div v-else-if="currentTab === 'map'" key="map" class="space-y-4">
                     
                     <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100">
@@ -359,14 +470,6 @@
                                 </button>
                             </div>
                             
-                            <!-- Add Button -->
-                            <button @click="showAddNavModal = true" class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-400 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center transition h-24">
-                                <i class="fas fa-plus mb-1 text-xl"></i>
-                                <span class="text-xs font-bold">新增地點</span>
-                            </button>
-                        </div>
-                    </div>
-
                     <!-- 模擬地圖預覽 -->
                     <div class="bg-gray-200 rounded-2xl h-64 relative overflow-hidden flex items-center justify-center group cursor-pointer" @click="openMap('Okinawa')">
                         <div class="absolute inset-0 bg-cover bg-center opacity-60 transition group-hover:opacity-80 group-hover:scale-105 duration-700" style="background-image: url('https://images.unsplash.com/photo-1594910065094-1a6f30d07255?q=80&w=1000&auto=format&fit=crop');"></div>
@@ -376,11 +479,11 @@
                     </div>
 
                     <div class="bg-white p-4 rounded-2xl shadow-sm mt-4">
-                        <h3 class="font-bold text-gray-800 mb-3">租車資訊備忘</h3>
-                        <div class="text-sm text-gray-600 space-y-2">
-                            <div class="flex items-center"><i class="fas fa-car w-6 text-center text-ocean-500"></i> <span class="font-bold text-gray-800">Holiday Rent A Car 租車</span> (沖繩県那霸市西2-6-11)</div>
-                            <div class="flex items-center"><i class="fas fa-phone w-6 text-center text-gray-400"></i> 098-917-4220</div>
-                            <div class="flex items-center"><i class="fas fa-hashtag w-6 text-center text-gray-400"></i> MapCode: 33 155 230*06</div>
+                        <h3 class="font-bold text-gray-800 mb-3">🚗 住宿與租車備忘</h3>
+                        <div class="text-sm text-gray-600 space-y-3">
+                            <div class="flex items-start"><i class="fas fa-hotel w-6 mt-1 text-center text-coral"></i> <div><span class="font-bold text-gray-800">那霸美居飯店 (Mercure)</span><br><span class="text-xs text-gray-400">單軌「壺川站」旁，全程連泊免搬行李</span></div></div>
+                            <div class="flex items-start"><i class="fas fa-car w-6 mt-1 text-center text-ocean-500"></i> <div><span class="font-bold text-gray-800">オキナワレンタカー</span><br><span class="text-xs text-ocean-600 font-bold">取車：8/22 10:00<br>還車：8/27 20:00</span></div></div>
+                            <div class="flex items-center"><i class="fas fa-phone w-6 text-center text-gray-400"></i> LINE ID: ＠551ixjcy</div>
                         </div>
                     </div>
                 </div>
@@ -394,7 +497,7 @@
         <div v-if="showAddModal" class="absolute inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
             <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up">
                 <!-- 動態標題 -->
-                <h3 class="text-xl font-bold mb-4">{{ isEditing ? '修改行程' : '新增行程' }} {{ days[selectedDayIndex] }}</h3>
+                <h3 class="text-xl font-bold mb-4">{{ isEditing ? '修改行程' : '新增行程至' }} {{ days[selectedDayIndex] }}</h3>
                 <div class="space-y-4">
                     <div>
                         <label class="block text-xs text-gray-500 mb-1">時間</label>
@@ -416,7 +519,7 @@
                 <div class="flex gap-3 mt-6">
                     <button @click="showAddModal = false" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-bold">取消</button>
                     <!-- 按鈕文字動態變化 -->
-                    <button @click="saveItinerary" class="flex-1 py-3 rounded-xl bg-ocean-500 text-white font-bold shadow-lg shadow-ocean-500/30">{{ isEditing ? '保存修改' : '新增' }}</button>
+                    <button @click="saveItinerary" class="flex-1 py-3 rounded-xl bg-ocean-500 text-white font-bold shadow-lg shadow-ocean-500/30">{{ isEditing ? '保存修改' : '確認新增' }}</button>
                 </div>
             </div>
         </div>
@@ -455,7 +558,7 @@
             </div>
         </div>
 
-        <!-- Manage Users Modal (成員管理) -->
+        <!-- Manage Users Modal -->
         <div v-if="showManageUsersModal" class="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-up">
                 <h3 class="text-xl font-bold text-gray-800 mb-4">成員管理</h3>
@@ -510,15 +613,31 @@
             </div>
         </div>
 
-        <!-- Add Expense Modal (含進階分帳選擇) - AI 功能已移除 -->
+        <!-- Add Day Modal (新增日期彈窗) -->
+        <div v-if="showAddDayModal" class="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-up">
+                <h3 class="text-xl font-bold text-center text-gray-800 mb-4">新增行程日期</h3>
+                <div class="space-y-4 mb-6">
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">選擇日期</label>
+                        <input v-model="newDayDate" type="date" class="w-full bg-gray-50 rounded-xl px-4 py-3 border-none focus:ring-2 focus:ring-ocean-400 text-lg">
+                    </div>
+                </div>
+                <div class="flex gap-3">
+                    <button @click="showAddDayModal = false" class="flex-1 py-3 rounded-xl bg-gray-100 text-gray-600 font-bold hover:bg-gray-200 transition">取消</button>
+                    <button @click="confirmAddDay" class="flex-1 py-3 rounded-xl bg-ocean-500 text-white font-bold shadow-lg shadow-ocean-500/30 hover:bg-ocean-600 transition">確認新增</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add Expense Modal -->
         <div v-if="showExpenseModal" class="absolute inset-0 bg-black/50 z-50 flex items-end sm:items-center justify-center">
             <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-6 shadow-2xl animate-slide-up max-h-[90vh] overflow-y-auto">
-                
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-xl font-bold">記一筆</h3>
                 </div>
 
-                <div class="space-y-4 border-t border-gray-100 pt-4">
+                <div class="space-y-4 pt-2">
                     <div>
                         <label class="block text-xs text-gray-500 mb-1">項目名稱</label>
                         <input v-model="newExpense.title" type="text" placeholder="午餐、門票..." class="w-full bg-gray-50 rounded-xl px-4 py-3 border-none focus:ring-2 focus:ring-ocean-400">
@@ -528,7 +647,6 @@
                         <input v-model.number="newExpense.amount" type="number" placeholder="¥ 0" class="w-full bg-gray-50 rounded-xl px-4 py-3 border-none focus:ring-2 focus:ring-ocean-400 text-lg font-bold">
                     </div>
                     
-                    <!-- 付款人 -->
                     <div>
                         <label class="block text-xs text-gray-500 mb-2">誰先付的？</label>
                         <div class="flex gap-2 flex-wrap">
@@ -543,7 +661,6 @@
                         </div>
                     </div>
 
-                    <!-- 分攤對象 (Split With) -->
                     <div>
                         <label class="block text-xs text-gray-500 mb-2">分攤對象 ({{ newExpense.involved.length }}人)</label>
                         <div class="grid grid-cols-3 gap-2">
@@ -567,7 +684,7 @@
             </div>
         </div>
         
-        <!-- 新增: Data Management Modal (資料管理) -->
+        <!-- Data Management Modal -->
         <div v-if="showDataModal" class="absolute inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
             <div class="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl animate-scale-up">
                 <h3 class="text-xl font-bold text-gray-800 mb-2">資料管理</h3>
@@ -599,26 +716,31 @@
         </div>
 
         <!-- Bottom Navigation -->
-        <nav class="bg-white border-t border-gray-100 px-6 pt-3 pb-6 pb-safe flex justify-between items-center z-40">
-            <button @click="currentTab = 'itinerary'" class="flex flex-col items-center gap-1 w-14 transition duration-300" :class="currentTab === 'itinerary' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
+        <!-- 修改: 新增 探索 (Explore) 分頁，並使用 flex-1 均分寬度 -->
+        <nav class="bg-white border-t border-gray-100 px-2 pt-3 pb-6 pb-safe flex justify-between items-center z-40">
+            <button @click="currentTab = 'itinerary'" class="flex-1 flex flex-col items-center gap-1 transition duration-300" :class="currentTab === 'itinerary' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
                 <i class="fas fa-list-ul text-xl"></i>
                 <span class="text-[10px] font-medium">行程</span>
             </button>
             
-            <button @click="currentTab = 'expenses'" class="flex flex-col items-center gap-1 w-14 transition duration-300" :class="currentTab === 'expenses' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
+            <button @click="currentTab = 'explore'" class="flex-1 flex flex-col items-center gap-1 transition duration-300" :class="currentTab === 'explore' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
+                <i class="fas fa-compass text-xl"></i>
+                <span class="text-[10px] font-medium">探索</span>
+            </button>
+
+            <button @click="currentTab = 'expenses'" class="flex-1 flex flex-col items-center gap-1 transition duration-300" :class="currentTab === 'expenses' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
                 <i class="fas fa-file-invoice-dollar text-xl"></i>
                 <span class="text-[10px] font-medium">分帳</span>
             </button>
             
-            <!-- 匯率分頁按鈕 -->
-            <button @click="currentTab = 'converter'" class="flex flex-col items-center gap-1 w-14 transition duration-300" :class="currentTab === 'converter' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
+            <button @click="currentTab = 'converter'" class="flex-1 flex flex-col items-center gap-1 transition duration-300" :class="currentTab === 'converter' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
                 <i class="fas fa-calculator text-xl"></i>
                 <span class="text-[10px] font-medium">匯率</span>
             </button>
             
-            <button @click="currentTab = 'map'" class="flex flex-col items-center gap-1 w-14 transition duration-300" :class="currentTab === 'map' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
+            <button @click="currentTab = 'map'" class="flex-1 flex flex-col items-center gap-1 transition duration-300" :class="currentTab === 'map' ? 'text-ocean-600 scale-110' : 'text-gray-400'">
                 <i class="fas fa-map-marked-alt text-xl"></i>
-                <span class="text-[10px] font-medium">地圖</span>
+                <span class="text-[10px] font-medium">導航</span>
             </button>
         </nav>
 
@@ -636,54 +758,71 @@
                 const showExpenseModal = ref(false);
                 const showAddNavModal = ref(false);
                 const showManageUsersModal = ref(false); 
-                const showDataModal = ref(false); // 新增: 資料管理 Modal
+                const showDataModal = ref(false); 
+                const showAddDayModal = ref(false);
                 
-                // 行程資料 (預設資料，若有 localStorage 則會被覆蓋)
-                const days = ref(['12/24 (三)', '12/25 (四)', '12/26 (五)', '12/27 (六)']);
+                const days = ref(['8/21 (五)', '8/22 (六)', '8/23 (日)', '8/24 (一)', '8/25 (二)', '8/26 (三)', '8/27 (四)', '8/28 (五)']);
                 const newDayDate = ref('');
-                
+                const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
                 const selectedDayIndex = ref(0);
                 const itineraryItems = ref([
-                    // Day 1: 12/24 (三) 那霸機場 / 市區
-                    { id: 101, dayIndex: 0, time: '20:50', title: '抵達那霸機場', location: 'Naha Airport', note: 'Bic Camera 位於機場?' },
-                    { id: 102, dayIndex: 0, time: '21:30', title: 'Check-in 飯店', location: 'Almont Hotel Naha-Omoromachi', note: '那霸歌町阿爾蒙特飯店' },
-                    { id: 103, dayIndex: 0, time: '22:00', title: '晚餐: 暖暮拉麵 / 燒肉本部牧場', location: 'Danbo Ramen Naha', note: '或 Ji-ma-n-ya (離飯店7分, 可預約)' },
-                    { id: 104, dayIndex: 0, time: '23:30', title: '唐吉訶德 Don Quijote', location: 'Don Quijote Kokusai Dori', note: '開到3點，去溜搭溜搭' },
-                    // Day 2
-                    { id: 201, dayIndex: 1, time: '09:00', title: '早餐: 豬肉蛋飯糰', location: 'Pork Tamago Onigiri', note: '' },
-                    { id: 202, dayIndex: 1, time: '10:00', title: '那霸達摩寺', location: 'Daruma Temple Naha', note: '' },
-                    { id: 203, dayIndex: 1, time: '11:30', title: '沖繩世界玉泉洞', location: 'Okinawa World', note: '鐘乳石洞 - 記得先訂票 (kkday/klook)' },
-                    { id: 204, dayIndex: 1, time: '13:30', title: '午餐: 幸福鬆餅', location: 'A Happy Pancake Umikaji Terrace', note: '位於瀨長島' },
-                    { id: 205, dayIndex: 1, time: '15:00', title: '瀨長島 Umikaji Terrace', location: 'Senagajima Umikaji Terrace', note: '看飛機起降 / 逛街' },
-                    { id: 206, dayIndex: 1, time: '16:30', title: '波上宮', location: 'Naminoue Shrine', note: '海邊神社' },
-                    { id: 207, dayIndex: 1, time: '18:00', title: '首里城', location: 'Shurijo Castle', note: '需要訂票' },
-                    { id: 208, dayIndex: 1, time: '19:30', title: '晚餐: Okiraku', location: 'Okiraku Okinawa', note: '位於國際通屋台村 (夜市)' },
-                    { id: 209, dayIndex: 1, time: '21:00', title: '逛街: 沖繩媳婦', location: 'Okinawa Daughter', note: '紀念品店' },
-                    // Day 3
-                    { id: 301, dayIndex: 2, time: '09:30', title: '港川外人住宅區', location: 'Minatogawa Stateside Town', note: '拍照好去處' },
-                    { id: 302, dayIndex: 2, time: '11:00', title: '午餐: Te Da Ko 沖繩麵', location: 'Te Da Ko Okinawa Soba', note: '' },
-                    { id: 303, dayIndex: 2, time: '13:00', title: 'BANTA CAFE', location: 'Hoshino Resorts Banta Cafe', note: '海景咖啡' },
-                    { id: 304, dayIndex: 2, time: '15:00', title: '萬座毛', location: 'Cape Manzamo', note: '象鼻岩' },
-                    { id: 305, dayIndex: 2, time: '16:30', title: 'PARCO CITY', location: 'San-A Urasoe West Coast PARCO CITY', note: '大型購物中心' },
-                    { id: 306, dayIndex: 2, time: '19:00', title: '美國村', location: 'American Village Okinawa', note: '20:00 水邊有煙火! 逛新垣瓦工場' },
-                    // Day 4
-                    { id: 401, dayIndex: 3, time: '09:00', title: '許田休息站', location: 'Roadside Station Kyoda', note: '買便宜水族館門票' },
-                    { id: 402, dayIndex: 3, time: '10:30', title: '美麗海水族館', location: 'Okinawa Churaumi Aquarium', note: '預計停留4小時，車停北門停車場' },
-                    { id: 403, dayIndex: 3, time: '12:30', title: '午餐: Ocean Blue / Shinmei', location: 'Ocean Blue Okinawa', note: '水族館內看鯨魚 / Shinmei Coffee' },
-                    { id: 404, dayIndex: 3, time: '15:30', title: '古宇利島', location: 'Kouri Island', note: '' },
-                    { id: 405, dayIndex: 3, time: '17:00', title: '晚餐: 古宇利島蝦蝦飯', location: 'Kouri Shrimp', note: '必吃美食' },
+                    // Day 1: 8/21 無車日 (搭單軌)
+                    { id: 101, dayIndex: 0, time: '20:50', title: '抵達那霸機場', location: 'Naha Airport', note: '搭乘單軌列車前往飯店' },
+                    { id: 102, dayIndex: 0, time: '21:40', title: 'Check-in: 那霸美居飯店', location: 'Mercure Okinawa Naha', note: '位於壺川站，放好行李準備出門' },
+                    { id: 103, dayIndex: 0, time: '22:30', title: '宵夜與採買：唐吉訶德', location: 'Don Quijote Kokusai Dori', note: '24小時營業，順便吃暖暮拉麵或居酒屋' },
+                    
+                    // Day 2: 8/22 取車與南部之旅
+                    { id: 201, dayIndex: 1, time: '10:00', title: '取車：オキナワレンタカー', location: 'Okinawa Rent a car', note: '確認租車手續，開始右駕之旅！' },
+                    { id: 202, dayIndex: 1, time: '11:00', title: '沖繩世界玉泉洞', location: 'Okinawa World', note: '壯觀鐘乳石洞，順便逛琉球文化村' },
+                    { id: 203, dayIndex: 1, time: '14:30', title: '瀨長島 Umikaji Terrace', location: 'Senagajima Umikaji Terrace', note: '看飛機起降，下午茶吃幸福鬆餅' },
+                    { id: 204, dayIndex: 1, time: '18:00', title: '國際通屋台村', location: 'Kokusai Dori Yataimura', note: '晚餐：體驗道地沖繩熱鬧氛圍' },
+                    
+                    // Day 3: 8/23 中部打卡與夕陽
+                    { id: 301, dayIndex: 2, time: '10:00', title: '港川外人住宅區', location: 'Minatogawa Stateside Town', note: '文青散步，吃可麗露/喝咖啡' },
+                    { id: 302, dayIndex: 2, time: '12:30', title: '美國村', location: 'American Village Okinawa', note: '午餐與異國風情逛街' },
+                    { id: 303, dayIndex: 2, time: '16:30', title: '殘波岬', location: 'Cape Zanpa', note: '純白燈塔與斷崖絕壁，欣賞絕美夕陽' },
+                    { id: 304, dayIndex: 2, time: '18:30', title: '晚餐：燒肉本部牧場 或 居酒屋', location: '', note: '視情況安排' },
+                    
+                    // Day 4: 8/24 北部一日遊 (車程較長)
+                    { id: 401, dayIndex: 3, time: '09:00', title: '許田休息站', location: 'Roadside Station Kyoda', note: '買水族館特惠門票，買點當地小吃車上吃' },
+                    { id: 402, dayIndex: 3, time: '10:30', title: '美麗海水族館', location: 'Okinawa Churaumi Aquarium', note: '必看黑潮之海鯨鯊' },
+                    { id: 403, dayIndex: 3, time: '14:00', title: '古宇利島', location: 'Kouri Island', note: '開車過跨海大橋，看果凍海' },
+                    { id: 404, dayIndex: 3, time: '14:30', title: '古宇利蝦蝦飯', location: 'Kouri Shrimp', note: '必吃人氣美食' },
+                    { id: 405, dayIndex: 3, time: '16:00', title: '古宇利海洋塔 / 心形岩', location: 'Heart Rock Kouri Island', note: '二擇一或順遊' },
+                    
+                    // Day 5: 8/25 東海岸與無敵海景購物
+                    { id: 501, dayIndex: 4, time: '10:00', title: '海中道路', location: 'Kaichu Doro', note: '跨海大橋無敵海景兜風' },
+                    { id: 502, dayIndex: 4, time: '12:00', title: '泡瀬漁港', location: 'Awase Fish Market', note: '高CP值海鮮午餐，推薦烤半龍蝦' },
+                    { id: 503, dayIndex: 4, time: '14:00', title: '勝連城跡', location: 'Katsuren Castle Ruins', note: '沖繩最古老城跡，登高望遠' },
+                    { id: 504, dayIndex: 4, time: '16:00', title: 'Parco City', location: 'San-A Urasoe West Coast PARCO CITY', note: '無敵海景大型購物中心血拼與晚餐' },
+                    
+                    // Day 6: 8/26 文化漫遊與Rycom
+                    { id: 601, dayIndex: 5, time: '10:00', title: '波上宮', location: 'Naminoue Shrine', note: '那霸市區最美海邊神社' },
+                    { id: 602, dayIndex: 5, time: '11:30', title: '首里城 / 金城町石疊道', location: 'Shurijo Castle', note: '感受琉球歷史氛圍' },
+                    { id: 603, dayIndex: 5, time: '14:00', title: '浦添大公園', location: 'Urasoe Grand Park', note: '超長滾輪式溜滑梯體驗' },
+                    { id: 604, dayIndex: 5, time: '16:00', title: '永旺夢樂城 (Rycom)', location: 'AEON Mall Okinawa Rycom', note: '超大購物中心，內有巨型水族箱' },
+                    
+                    // Day 7: 8/27 南部購物與還車
+                    { id: 701, dayIndex: 6, time: '10:30', title: 'iias 沖繩豐崎 / DMM 水族館', location: 'iias Okinawa Toyosaki', note: '逛街或去最新的影音水族館' },
+                    { id: 702, dayIndex: 6, time: '13:30', title: 'Ashibinaa Outlet', location: 'Okinawa Outlet Mall Ashibinaa', note: '名牌折扣城，午餐與最後血拼' },
+                    { id: 703, dayIndex: 6, time: '17:00', title: '晚餐 / 採買', location: '', note: '還車前可先至超市或餐廳吃飽' },
+                    { id: 704, dayIndex: 6, time: '20:00', title: '還車：オキナワレンタカー', location: 'Okinawa Rent a car', note: '車輛歸還，搭單軌或計程車回美居飯店' },
+                    
+                    // Day 8: 8/28 無車日 (搭單軌) 與回家
+                    { id: 801, dayIndex: 7, time: '09:30', title: '行李寄放飯店', location: 'Mercure Okinawa Naha', note: '睡飽退房，帶著輕便背包出發' },
+                    { id: 802, dayIndex: 7, time: '10:00', title: '沖繩縣立博物館．美術館', location: 'Okinawa Prefectural Museum & Art Museum', note: '單軌: Omoromachi站，吹冷氣看展覽' },
+                    { id: 803, dayIndex: 7, time: '13:00', title: '牧志市場', location: 'Makishi Public Market', note: '午餐：吃新鮮海鮮' },
+                    { id: 804, dayIndex: 7, time: '15:00', title: '國際通最後採買', location: 'Kokusai Dori', note: 'Jisakasu 雜貨店、Can Do、淳久堂' },
+                    { id: 805, dayIndex: 7, time: '18:30', title: '回飯店拿行李出發機場', location: 'Naha Airport', note: '單軌壺川站直達機場' },
+                    { id: 806, dayIndex: 7, time: '21:40', title: '航班起飛', location: '', note: '帶著滿滿回憶回家！' }
                 ]);
 
-                // 新增行程表單
                 const newItem = ref({ time: '', title: '', location: '', note: '' });
-                // 編輯狀態
                 const isEditing = ref(false);
                 const editingId = ref(null);
 
-                // 分帳資料
                 const users = ref(['我', 'Alex', 'Sarah']); 
                 const newMemberName = ref('');
-                // 更新 expenses 結構，加入 involved (分攤者)
                 const expenses = ref([
                     { id: 1, title: '租車費用', amount: 15000, payer: 'Alex', involved: ['我', 'Alex', 'Sarah'] },
                     { id: 2, title: '便利商店', amount: 3200, payer: 'Sarah', involved: ['我', 'Alex', 'Sarah'] },
@@ -691,11 +830,8 @@
                 ]);
                 const newExpense = ref({ title: '', amount: '', payer: '我', involved: ['我', 'Alex', 'Sarah'] });
                 const exchangeRate = ref(0.215); 
-                
-                // Converter
                 const converterJpy = ref(null);
 
-                // 快速導航資料
                 const quickNavs = ref([
                     { id: 1, name: '那霸機場', location: 'Naha Airport', icon: 'fas fa-plane', bgClass: 'bg-blue-50', textClass: 'text-blue-600' },
                     { id: 2, name: '美麗海水族館', location: 'Okinawa Churaumi Aquarium', icon: 'fas fa-fish', bgClass: 'bg-cyan-50', textClass: 'text-cyan-600' },
@@ -704,32 +840,109 @@
                 ]);
                 const newNav = ref({ name: '', location: '', icon: 'fas fa-map-marker-alt' });
                 const navIcons = [
-                    { class: 'fas fa-map-marker-alt' },
-                    { class: 'fas fa-utensils' },
-                    { class: 'fas fa-coffee' },
-                    { class: 'fas fa-shopping-cart' },
-                    { class: 'fas fa-hotel' },
-                    { class: 'fas fa-camera' },
-                    { class: 'fas fa-umbrella-beach' },
+                    { class: 'fas fa-map-marker-alt' }, { class: 'fas fa-utensils' }, { class: 'fas fa-coffee' },
+                    { class: 'fas fa-shopping-cart' }, { class: 'fas fa-hotel' }, { class: 'fas fa-camera' }, { class: 'fas fa-umbrella-beach' },
                 ];
                 const navColors = [
-                    { bg: 'bg-blue-50', text: 'text-blue-600' },
-                    { bg: 'bg-green-50', text: 'text-green-600' },
-                    { bg: 'bg-orange-50', text: 'text-orange-600' },
-                    { bg: 'bg-pink-50', text: 'text-pink-600' },
-                    { bg: 'bg-yellow-50', text: 'text-yellow-600' }
+                    { bg: 'bg-blue-50', text: 'text-blue-600' }, { bg: 'bg-green-50', text: 'text-green-600' },
+                    { bg: 'bg-orange-50', text: 'text-orange-600' }, { bg: 'bg-pink-50', text: 'text-pink-600' }, { bg: 'bg-yellow-50', text: 'text-yellow-600' }
                 ];
 
+                // --- 探索 (Explore) 資料 ---
+                const selectedRegion = ref('那霸'); // 預設開啟那霸
+                const attractionsDB = {
+                    '北部': [
+                        { name: '美麗海水族館', loc: 'Okinawa Churaumi Aquarium', desc: '世界級水族館，看黑潮之海的鯨鯊。', icon: 'fas fa-fish', colorClass: 'text-blue-500', type: 'indoor' },
+                        { name: '古宇利島', loc: 'Kouri Island', desc: '擁有超美果凍海的戀之島，必吃蝦蝦飯。', icon: 'fas fa-umbrella-beach', colorClass: 'text-blue-400', type: 'outdoor' },
+                        { name: '古宇利海洋塔', loc: 'Kouri Ocean Tower', desc: '敲響幸福鐘，俯瞰古宇利藍海景。', icon: 'fas fa-broadcast-tower', colorClass: 'text-cyan-500', type: 'indoor' },
+                        { name: '心形岩', loc: 'Heart Rock Kouri Island', desc: '嵐拍廣告的知名景點，浪漫海中岩石。', icon: 'fas fa-heart', colorClass: 'text-pink-500', type: 'outdoor' },
+                        { name: '今歸仁城跡', loc: 'Nakijin Castle Ruins', desc: '世界遺產，春天時是賞櫻勝地。', icon: 'fas fa-chess-rook', colorClass: 'text-gray-500', type: 'outdoor' },
+                        { name: '瀨底島', loc: 'Sesoko Island', desc: '開車就能到的離島，沙灘水質超清澈。', icon: 'fas fa-water', colorClass: 'text-blue-300', type: 'outdoor' },
+                        { name: '部瀨名海中公園', loc: 'Busena Marine Park', desc: '乘坐玻璃底船、海中展望塔看熱帶魚。', icon: 'fas fa-ship', colorClass: 'text-cyan-600', type: 'both' },
+                        { name: '名護鳳梨園', loc: 'Nago Pineapple Park', desc: '搭乘造型遊園車，適合親子的熱帶植物園。', icon: 'fas fa-seedling', colorClass: 'text-yellow-500', type: 'both' },
+                        { name: 'DINO恐龍公園', loc: 'DINO Dinosaur PARK', desc: '隱藏在亞熱帶森林裡的恐龍探險。', icon: 'fas fa-dragon', colorClass: 'text-green-600', type: 'outdoor' },
+                        { name: 'Orion啤酒廠', loc: 'Orion Happy Park', desc: '參觀沖繩在地啤酒製造過程並試飲。', icon: 'fas fa-beer', colorClass: 'text-yellow-600', type: 'indoor' },
+                        { name: '許田休息站', loc: 'Roadside Station Kyoda', desc: '買水族館特價門票及當地名產的好地方。', icon: 'fas fa-store', colorClass: 'text-orange-500', type: 'both' },
+                        { name: '邊戶岬', loc: 'Cape Hedo', desc: '沖繩本島最北端，壯麗斷崖絕壁與太平洋海景。', icon: 'fas fa-camera', colorClass: 'text-blue-600', type: 'outdoor' },
+                        { name: '備瀨福木林道', loc: 'Bise Fukugi Tree Road', desc: '漫步或騎腳踏車穿梭於傳統防風林隧道中。', icon: 'fas fa-tree', colorClass: 'text-green-600', type: 'outdoor' }
+                    ],
+                    '中部': [
+                        { name: '美國村', loc: 'American Village Okinawa', desc: '充滿異國風情的購物區，晚上有絕美夜景。', icon: 'fas fa-shopping-cart', colorClass: 'text-red-500', type: 'outdoor' },
+                        { name: '萬座毛', loc: 'Cape Manzamo', desc: '著名的象鼻岩與壯麗海景。', icon: 'fas fa-camera', colorClass: 'text-green-600', type: 'outdoor' },
+                        { name: '琉球村', loc: 'Ryukyu Mura', desc: '體驗傳統琉球文化、工藝與太鼓表演。', icon: 'fas fa-drum', colorClass: 'text-orange-600', type: 'both' },
+                        { name: '青之洞窟', loc: 'Blue Cave Okinawa', desc: '潛水與浮潛勝地，夢幻的藍色光芒。', icon: 'fas fa-water', colorClass: 'text-blue-500', type: 'outdoor' },
+                        { name: '殘波岬', loc: 'Cape Zanpa', desc: '白色的燈塔與斷崖絕壁，適合看夕陽。', icon: 'fas fa-broadcast-tower', colorClass: 'text-gray-600', type: 'outdoor' },
+                        { name: '座喜味城跡', loc: 'Zakimi Castle Ruins', desc: '世界遺產，城牆曲線優美且免門票。', icon: 'fas fa-chess-rook', colorClass: 'text-gray-500', type: 'outdoor' },
+                        { name: '海中道路', loc: 'Kaichu Doro', desc: '連接多個離島的跨海大橋，兜風首選。', icon: 'fas fa-road', colorClass: 'text-blue-400', type: 'outdoor' },
+                        { name: 'BIOS之丘', loc: 'Bios no Oka', desc: '搭乘遊覽船的亞熱帶自然生態園區。', icon: 'fas fa-leaf', colorClass: 'text-green-500', type: 'outdoor' },
+                        { name: '勝連城跡', loc: 'Katsuren Castle Ruins', desc: '最古老的城跡之一，可登高俯瞰海景。', icon: 'fas fa-chess-rook', colorClass: 'text-gray-500', type: 'outdoor' },
+                        { name: '泡瀬漁港', loc: 'Awase Fish Market', desc: '在地人推薦的超高CP值烤半龍蝦定食。', icon: 'fas fa-utensils', colorClass: 'text-red-400', type: 'indoor' },
+                        { name: '港川外人住宅', loc: 'Minatogawa Stateside Town', desc: '文青必逛！充滿特色咖啡廳與甜點店。', icon: 'fas fa-coffee', colorClass: 'text-yellow-600', type: 'outdoor' },
+                        { name: '浦添大公園', loc: 'Urasoe Grand Park', desc: '擁有超長滾輪式溜滑梯，親子放電必去。', icon: 'fas fa-child', colorClass: 'text-green-400', type: 'outdoor' },
+                        { name: 'Parco City', loc: 'San-A Urasoe West Coast PARCO CITY', desc: '沖繩超大型無敵海景購物中心。', icon: 'fas fa-shopping-bag', colorClass: 'text-purple-500', type: 'indoor' },
+                        { name: '永旺夢樂城', loc: 'AEON Mall Okinawa Rycom', desc: '超大型購物中心，內有巨型水族箱。', icon: 'fas fa-shopping-bag', colorClass: 'text-red-500', type: 'indoor' },
+                        { name: '永旺讀谷購物中心', loc: 'AEON Town Yomitan', desc: '好逛好買的大型在地超市與購物中心。', icon: 'fas fa-shopping-cart', colorClass: 'text-pink-500', type: 'indoor' },
+                        { name: '小浜の川神', loc: 'Kohama River Shrine', desc: '在地靜謐的秘境小神社與湧泉。', icon: 'fas fa-water', colorClass: 'text-teal-500', type: 'outdoor' },
+                        { name: 'Panza Okinawa Zipline', loc: 'Panza Okinawa', desc: '滑索、海上步道，體驗刺激的海上飛翔。', icon: 'fas fa-wind', colorClass: 'text-blue-400', type: 'outdoor' }
+                    ],
+                    '那霸': [
+                        { name: '國際通', loc: 'Kokusai Dori', desc: '沖繩最繁華的奇蹟的1哩路，購物吃喝全包。', icon: 'fas fa-store', colorClass: 'text-red-500', type: 'outdoor' },
+                        { name: '國際通屋台村', loc: 'Kokusai Dori Yataimura', desc: '充滿道地美食與熱情氛圍的居酒屋聚落。', icon: 'fas fa-beer', colorClass: 'text-orange-500', type: 'outdoor' },
+                        { name: '牧志市場', loc: 'Makishi Public Market', desc: '那霸市民的廚房，一樓買海鮮二樓代客料理。', icon: 'fas fa-utensils', colorClass: 'text-blue-500', type: 'indoor' },
+                        { name: '波上宮', loc: 'Naminoue Shrine', desc: '建在海邊懸崖上的絕美神社。', icon: 'fas fa-om', colorClass: 'text-orange-500', type: 'outdoor' },
+                        { name: '首里城', loc: 'Shurijo Castle', desc: '琉球王國的象徵，正在復原中，可參觀外圍。', icon: 'fas fa-torii-gate', colorClass: 'text-red-600', type: 'outdoor' },
+                        { name: '金城町石疊道', loc: 'Kinjocho Stone-Paved Path', desc: '首里城旁的古道，感受琉球歷史氛圍。', icon: 'fas fa-shoe-prints', colorClass: 'text-gray-500', type: 'outdoor' },
+                        { name: '泊港魚市', loc: 'Tomariiyumachi', desc: '生魚片、海鮮丼愛好者的平價天堂。', icon: 'fas fa-fish', colorClass: 'text-cyan-500', type: 'indoor' },
+                        { name: '識名園', loc: 'Shikinaen', desc: '世界遺產，琉球王室的庭園別墅。', icon: 'fas fa-tree', colorClass: 'text-green-600', type: 'outdoor' },
+                        { name: '那霸機場', loc: 'Naha Airport', desc: '必逛的免稅店、伴手禮與沖繩飯糰。', icon: 'fas fa-plane-departure', colorClass: 'text-blue-600', type: 'indoor' },
+                        { name: '國際通淳久堂書局', loc: 'Junkudo Naha', desc: '沖繩超大型書店，書籍文具愛好者必逛。', icon: 'fas fa-book', colorClass: 'text-indigo-500', type: 'indoor' },
+                        { name: 'Can☆Do百元商店', loc: 'Can Do Okinawa', desc: '超高CP值百元生活雜貨與可愛小物。', icon: 'fas fa-store', colorClass: 'text-orange-400', type: 'indoor' },
+                        { name: '沖繩縣立博物館．美術館', loc: 'Okinawa Prefectural Museum & Art Museum', desc: '深入了解沖繩歷史文化與藝術的最佳場所。', icon: 'fas fa-university', colorClass: 'text-gray-600', type: 'indoor' },
+                        { name: 'Jisakasu じーさーかす', loc: 'Jisakasu Naha', desc: '國際通巷弄裡的特色沖繩雜貨店。', icon: 'fas fa-gift', colorClass: 'text-pink-500', type: 'indoor' },
+                        { name: '沖繩媳婦', loc: 'Okinawa Daughter', desc: '熱門紀念品與特色伴手禮店。', icon: 'fas fa-shopping-bag', colorClass: 'text-red-400', type: 'indoor' },
+                        { name: '唐吉訶德', loc: 'Don Quijote Kokusai Dori', desc: '驚安的殿堂，國際通必逛，採買藥妝零食。', icon: 'fas fa-store-alt', colorClass: 'text-yellow-500', type: 'indoor' }
+                    ],
+                    '南部': [
+                        { name: '玉泉洞 (沖繩世界)', loc: 'Okinawa World', desc: '超壯觀的鐘乳石洞與琉球傳統文化村。', icon: 'fas fa-gem', colorClass: 'text-purple-500', type: 'both' },
+                        { name: '瀨長島', loc: 'Senagajima Umikaji Terrace', desc: '有「小希臘」之稱，吃幸福鬆餅看飛機。', icon: 'fas fa-plane', colorClass: 'text-blue-400', type: 'outdoor' },
+                        { name: 'Ashibinaa Outlet', loc: 'Okinawa Outlet Mall Ashibinaa', desc: '名牌折扣購物城，適合買爆。', icon: 'fas fa-shopping-bag', colorClass: 'text-red-400', type: 'outdoor' },
+                        { name: 'DMM KARIYUSHI水族館', loc: 'DMM Kariyushi Aquarium', desc: '結合最新影像技術的現代感水族館。', icon: 'fas fa-fish', colorClass: 'text-cyan-400', type: 'indoor' },
+                        { name: '平和祈念公園', loc: 'Okinawa Prefectural Peace Memorial Park', desc: '腹地廣大，有適合小孩放電的大型遊具。', icon: 'fas fa-dove', colorClass: 'text-blue-500', type: 'outdoor' },
+                        { name: '琉球玻璃村', loc: 'Ryukyu Glass Village', desc: '體驗吹玻璃，室內景點雨天備案。', icon: 'fas fa-wine-glass', colorClass: 'text-orange-400', type: 'indoor' },
+                        { name: '奧武島', loc: 'Ojima Island', desc: '開車就能到的貓島，必吃知名炸天婦羅。', icon: 'fas fa-cat', colorClass: 'text-yellow-600', type: 'outdoor' },
+                        { name: '齋場御嶽', loc: 'Sefa-utaki', desc: '琉球王國最高的聖地，充滿神秘氣息。', icon: 'fas fa-leaf', colorClass: 'text-green-600', type: 'outdoor' },
+                        { name: 'Gangala之谷', loc: 'Valley of Gangala', desc: '太古時代的森林探險與鐘乳石洞咖啡。', icon: 'fas fa-tree', colorClass: 'text-green-700', type: 'outdoor' },
+                        { name: '知念岬', loc: 'Chinen Cape Park', desc: '無死角的太平洋無敵海景。', icon: 'fas fa-camera', colorClass: 'text-blue-500', type: 'outdoor' },
+                        { name: 'NIRAIKANAI橋', loc: 'Niraikanai Bridge', desc: '從山丘上開下來，迎面而來的絕美海景。', icon: 'fas fa-car', colorClass: 'text-gray-500', type: 'outdoor' },
+                        { name: 'iias 沖繩豐崎', loc: 'iias Okinawa Toyosaki', desc: '結合水族館的大型購物中心，近那霸機場。', icon: 'fas fa-shopping-cart', colorClass: 'text-blue-500', type: 'indoor' }
+                    ]
+                };
+
+                const regionAttractions = computed(() => {
+                    return attractionsDB[selectedRegion.value] || [];
+                });
+
+                const openAddFromExplore = (spot) => {
+                    // 自動帶入景點資訊
+                    newItem.value = { 
+                        time: '10:00', 
+                        title: spot.name, 
+                        location: spot.loc, 
+                        note: spot.desc 
+                    };
+                    isEditing.value = false;
+                    editingId.value = null;
+                    showAddModal.value = true;
+                };
+
                 // --- Storage Logic ---
-                const STORAGE_KEY = 'okinawa_trip_data_v1';
+                const STORAGE_KEY = 'okinawa_trip_data_v3'; // 更新版本號以強制載入全新的租車與飯店安排
                 
-                // Load from LocalStorage on mount
                 onMounted(() => {
                     const savedData = localStorage.getItem(STORAGE_KEY);
                     if (savedData) {
                         try {
                             const parsed = JSON.parse(savedData);
-                            // 恢復各個狀態
                             if(parsed.days) days.value = parsed.days;
                             if(parsed.itineraryItems) itineraryItems.value = parsed.itineraryItems;
                             if(parsed.expenses) expenses.value = parsed.expenses;
@@ -742,7 +955,6 @@
                     }
                 });
 
-                // Watch changes and Auto-save
                 watch([days, itineraryItems, expenses, users, quickNavs, exchangeRate], () => {
                     const dataToSave = {
                         days: days.value,
@@ -755,31 +967,21 @@
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
                 }, { deep: true });
 
-                // Export to JSON File
                 const exportData = () => {
-                    const data = {
-                        days: days.value,
-                        itineraryItems: itineraryItems.value,
-                        expenses: expenses.value,
-                        users: users.value,
-                        quickNavs: quickNavs.value,
-                        exchangeRate: exchangeRate.value
-                    };
+                    const data = { days: days.value, itineraryItems: itineraryItems.value, expenses: expenses.value, users: users.value, quickNavs: quickNavs.value, exchangeRate: exchangeRate.value };
                     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = url;
-                    a.download = 'okinawa_trip_backup.json'; // 下載檔名
+                    a.download = 'okinawa_trip_backup.json'; 
                     a.click();
                     URL.revokeObjectURL(url);
                     showDataModal.value = false;
                 };
 
-                // Import from JSON File
                 const importData = (event) => {
                     const file = event.target.files[0];
                     if(!file) return;
-                    
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         try {
@@ -790,7 +992,6 @@
                             if(data.users) users.value = data.users;
                             if(data.quickNavs) quickNavs.value = data.quickNavs;
                             if(data.exchangeRate) exchangeRate.value = data.exchangeRate;
-                            
                             alert('備份讀取成功！');
                             showDataModal.value = false;
                         } catch(err) {
@@ -798,14 +999,13 @@
                         }
                     };
                     reader.readAsText(file);
-                    // Reset input value to allow re-selecting same file
                     event.target.value = '';
                 };
 
                 const resetData = () => {
                     if(confirm('確定要清空所有資料嗎？這將會刪除所有行程與記帳紀錄，且無法復原。')) {
                         localStorage.removeItem(STORAGE_KEY);
-                        location.reload(); // 重新整理頁面以恢復預設值
+                        location.reload();
                     }
                 };
 
@@ -840,13 +1040,8 @@
                         }
                     });
 
-                    return Object.keys(balanceMap).map(name => ({
-                        name,
-                        amount: Math.round(balanceMap[name])
-                    }));
+                    return Object.keys(balanceMap).map(name => ({ name, amount: Math.round(balanceMap[name]) }));
                 });
-                
-                const calculateDaysLeft = computed(() => days.value.length);
                 
                 const converterTwd = computed(() => {
                     if (!converterJpy.value) return 0;
@@ -856,6 +1051,44 @@
                 // --- Methods ---
 
                 const toTWD = (yen) => Math.round(yen * exchangeRate.value).toLocaleString();
+
+                const openAddDayModal = () => {
+                    if (days.value.length > 0) {
+                        const lastDayStr = days.value[days.value.length - 1];
+                        const match = lastDayStr.match(/(\d+)\/(\d+)/);
+                        if (match) {
+                            const month = parseInt(match[1]);
+                            const day = parseInt(match[2]);
+                            const currentYear = new Date().getFullYear();
+                            const lastDate = new Date(currentYear, month - 1, day);
+                            lastDate.setDate(lastDate.getDate() + 1);
+                            const y = lastDate.getFullYear();
+                            const m = String(lastDate.getMonth() + 1).padStart(2, '0');
+                            const d = String(lastDate.getDate()).padStart(2, '0');
+                            newDayDate.value = `${y}-${m}-${d}`;
+                        }
+                    } else {
+                        const today = new Date();
+                        const y = today.getFullYear();
+                        const m = String(today.getMonth() + 1).padStart(2, '0');
+                        const d = String(today.getDate()).padStart(2, '0');
+                        newDayDate.value = `${y}-${m}-${d}`;
+                    }
+                    showAddDayModal.value = true;
+                };
+
+                const confirmAddDay = () => {
+                    if (!newDayDate.value) return;
+                    const dateObj = new Date(newDayDate.value);
+                    const m = dateObj.getMonth() + 1;
+                    const d = dateObj.getDate();
+                    const weekDay = weekDays[dateObj.getDay()];
+                    const formattedDate = `${m}/${d} (${weekDay})`;
+                    
+                    days.value.push(formattedDate);
+                    selectedDayIndex.value = days.value.length - 1;
+                    showAddDayModal.value = false;
+                };
 
                 const deleteDay = () => {
                     if (days.value.length <= 1) return;
@@ -891,17 +1124,10 @@
                     if (isEditing.value) {
                         const index = itineraryItems.value.findIndex(i => i.id === editingId.value);
                         if (index !== -1) {
-                            itineraryItems.value[index] = {
-                                ...itineraryItems.value[index],
-                                ...newItem.value
-                            };
+                            itineraryItems.value[index] = { ...itineraryItems.value[index], ...newItem.value };
                         }
                     } else {
-                        itineraryItems.value.push({
-                            id: Date.now(),
-                            dayIndex: selectedDayIndex.value,
-                            ...newItem.value
-                        });
+                        itineraryItems.value.push({ id: Date.now(), dayIndex: selectedDayIndex.value, ...newItem.value });
                     }
                     newItem.value = { time: '', title: '', location: '', note: '' };
                     showAddModal.value = false;
@@ -967,22 +1193,13 @@
                 const addNav = () => {
                     if (!newNav.value.name || !newNav.value.location) return;
                     const randomColor = navColors[Math.floor(Math.random() * navColors.length)];
-                    quickNavs.value.push({
-                        id: Date.now(),
-                        name: newNav.value.name,
-                        location: newNav.value.location,
-                        icon: newNav.value.icon,
-                        bgClass: randomColor.bg,
-                        textClass: randomColor.text
-                    });
+                    quickNavs.value.push({ id: Date.now(), name: newNav.value.name, location: newNav.value.location, icon: newNav.value.icon, bgClass: randomColor.bg, textClass: randomColor.text });
                     newNav.value = { name: '', location: '', icon: 'fas fa-map-marker-alt' };
                     showAddNavModal.value = false;
                 };
 
                 const deleteNav = (id) => {
-                    if (confirm('確定移除此導航捷徑？')) {
-                        quickNavs.value = quickNavs.value.filter(n => n.id !== id);
-                    }
+                    if (confirm('確定移除此導航捷徑？')) quickNavs.value = quickNavs.value.filter(n => n.id !== id);
                 };
 
                 const openMap = (location) => {
@@ -992,54 +1209,16 @@
                 };
 
                 return {
-                    currentTab,
-                    days,
-                    selectedDayIndex,
-                    itineraryItems,
-                    currentDayItinerary,
-                    showAddModal,
-                    showDeleteDayModal, 
-                    newItem,
-                    deleteDay,
-                    openAddModal,
-                    editItinerary,
-                    saveItinerary, 
-                    deleteItinerary,
-                    openMap,
-                    // Expenses
-                    expenses,
-                    users,
-                    newMemberName,
-                    showManageUsersModal,
-                    addMember,
-                    removeMember,
-                    toggleInvolved,
-                    getInvolvedText,
-                    totalExpenses,
-                    userBalances,
-                    showExpenseModal,
-                    newExpense,
-                    addExpense,
-                    deleteExpense,
-                    calculateDaysLeft,
-                    exchangeRate,
-                    toTWD,
-                    // Converter
-                    converterJpy,
-                    converterTwd,
-                    // Nav
-                    quickNavs,
-                    showAddNavModal,
-                    newNav,
-                    navIcons,
-                    addNav,
-                    deleteNav,
-                    isEditing,
-                    // Data Management
-                    showDataModal,
-                    exportData,
-                    importData,
-                    resetData
+                    currentTab, days, selectedDayIndex, itineraryItems, currentDayItinerary, showAddModal, showDeleteDayModal, 
+                    newItem, deleteDay, openAddModal, editItinerary, saveItinerary, deleteItinerary, openMap,
+                    expenses, users, newMemberName, showManageUsersModal, addMember, removeMember, toggleInvolved, getInvolvedText,
+                    totalExpenses, userBalances, showExpenseModal, newExpense, addExpense, deleteExpense, exchangeRate, toTWD,
+                    converterJpy, converterTwd, quickNavs, showAddNavModal, newNav, navIcons, addNav, deleteNav, isEditing,
+                    showDataModal, exportData, importData, resetData,
+                    // Explore Variables
+                    selectedRegion, regionAttractions, openAddFromExplore,
+                    // Add Day Variables
+                    showAddDayModal, newDayDate, openAddDayModal, confirmAddDay
                 };
             }
         }).mount('#app');
