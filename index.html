@@ -470,6 +470,14 @@
                                 </button>
                             </div>
                             
+                            <!-- Add Button -->
+                            <button @click="showAddNavModal = true" class="p-3 bg-gray-50 hover:bg-gray-100 rounded-xl text-gray-400 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center transition h-24">
+                                <i class="fas fa-plus mb-1 text-xl"></i>
+                                <span class="text-xs font-bold">新增地點</span>
+                            </button>
+                        </div>
+                    </div>
+                            
                     <!-- 模擬地圖預覽 -->
                     <div class="bg-gray-200 rounded-2xl h-64 relative overflow-hidden flex items-center justify-center group cursor-pointer" @click="openMap('Okinawa')">
                         <div class="absolute inset-0 bg-cover bg-center opacity-60 transition group-hover:opacity-80 group-hover:scale-105 duration-700" style="background-image: url('https://images.unsplash.com/photo-1594910065094-1a6f30d07255?q=80&w=1000&auto=format&fit=crop');"></div>
@@ -875,6 +883,7 @@
                         { name: '座喜味城跡', loc: 'Zakimi Castle Ruins', desc: '世界遺產，城牆曲線優美且免門票。', icon: 'fas fa-chess-rook', colorClass: 'text-gray-500', type: 'outdoor' },
                         { name: '海中道路', loc: 'Kaichu Doro', desc: '連接多個離島的跨海大橋，兜風首選。', icon: 'fas fa-road', colorClass: 'text-blue-400', type: 'outdoor' },
                         { name: 'BIOS之丘', loc: 'Bios no Oka', desc: '搭乘遊覽船的亞熱帶自然生態園區。', icon: 'fas fa-leaf', colorClass: 'text-green-500', type: 'outdoor' },
+                        { name: '東南植物樂園', loc: 'Southeast Botanical Gardens', desc: '充滿熱帶風情的植物園，夜間有點燈活動。', icon: 'fas fa-leaf', colorClass: 'text-green-500', type: 'outdoor' },
                         { name: '勝連城跡', loc: 'Katsuren Castle Ruins', desc: '最古老的城跡之一，可登高俯瞰海景。', icon: 'fas fa-chess-rook', colorClass: 'text-gray-500', type: 'outdoor' },
                         { name: '泡瀬漁港', loc: 'Awase Fish Market', desc: '在地人推薦的超高CP值烤半龍蝦定食。', icon: 'fas fa-utensils', colorClass: 'text-red-400', type: 'indoor' },
                         { name: '港川外人住宅', loc: 'Minatogawa Stateside Town', desc: '文青必逛！充滿特色咖啡廳與甜點店。', icon: 'fas fa-coffee', colorClass: 'text-yellow-600', type: 'outdoor' },
@@ -887,8 +896,11 @@
                     ],
                     '那霸': [
                         { name: '國際通', loc: 'Kokusai Dori', desc: '沖繩最繁華的奇蹟的1哩路，購物吃喝全包。', icon: 'fas fa-store', colorClass: 'text-red-500', type: 'outdoor' },
+                        { name: '松山歡樂街 (男人的行程)', loc: 'Matsuyama Naha', desc: '那霸最大的繁華歡樂街，體驗沖繩大人的夜生活。', icon: 'fas fa-glass-cheers', colorClass: 'text-purple-600', type: 'indoor' },
                         { name: '國際通屋台村', loc: 'Kokusai Dori Yataimura', desc: '充滿道地美食與熱情氛圍的居酒屋聚落。', icon: 'fas fa-beer', colorClass: 'text-orange-500', type: 'outdoor' },
+                        { name: '榮町市場', loc: 'Sakaemachi Market', desc: '白天是傳統市場，夜晚變身為充滿昭和風情的居酒屋街。', icon: 'fas fa-store-alt', colorClass: 'text-orange-600', type: 'indoor' },
                         { name: '牧志市場', loc: 'Makishi Public Market', desc: '那霸市民的廚房，一樓買海鮮二樓代客料理。', icon: 'fas fa-utensils', colorClass: 'text-blue-500', type: 'indoor' },
+                        { name: '西來院（達摩寺）', loc: 'Daruma Temple Naha', desc: '求安產與平安的知名達摩寺廟，充滿靜謐氛圍。', icon: 'fas fa-vihara', colorClass: 'text-red-700', type: 'both' },
                         { name: '波上宮', loc: 'Naminoue Shrine', desc: '建在海邊懸崖上的絕美神社。', icon: 'fas fa-om', colorClass: 'text-orange-500', type: 'outdoor' },
                         { name: '首里城', loc: 'Shurijo Castle', desc: '琉球王國的象徵，正在復原中，可參觀外圍。', icon: 'fas fa-torii-gate', colorClass: 'text-red-600', type: 'outdoor' },
                         { name: '金城町石疊道', loc: 'Kinjocho Stone-Paved Path', desc: '首里城旁的古道，感受琉球歷史氛圍。', icon: 'fas fa-shoe-prints', colorClass: 'text-gray-500', type: 'outdoor' },
@@ -909,6 +921,7 @@
                         { name: 'DMM KARIYUSHI水族館', loc: 'DMM Kariyushi Aquarium', desc: '結合最新影像技術的現代感水族館。', icon: 'fas fa-fish', colorClass: 'text-cyan-400', type: 'indoor' },
                         { name: '平和祈念公園', loc: 'Okinawa Prefectural Peace Memorial Park', desc: '腹地廣大，有適合小孩放電的大型遊具。', icon: 'fas fa-dove', colorClass: 'text-blue-500', type: 'outdoor' },
                         { name: '琉球玻璃村', loc: 'Ryukyu Glass Village', desc: '體驗吹玻璃，室內景點雨天備案。', icon: 'fas fa-wine-glass', colorClass: 'text-orange-400', type: 'indoor' },
+                        { name: '糸滿魚市場', loc: 'Itoman Fish Market', desc: '南部吃海鮮的首選！生蠔、海膽與生魚片超便宜。', icon: 'fas fa-fish', colorClass: 'text-blue-500', type: 'indoor' },
                         { name: '奧武島', loc: 'Ojima Island', desc: '開車就能到的貓島，必吃知名炸天婦羅。', icon: 'fas fa-cat', colorClass: 'text-yellow-600', type: 'outdoor' },
                         { name: '齋場御嶽', loc: 'Sefa-utaki', desc: '琉球王國最高的聖地，充滿神秘氣息。', icon: 'fas fa-leaf', colorClass: 'text-green-600', type: 'outdoor' },
                         { name: 'Gangala之谷', loc: 'Valley of Gangala', desc: '太古時代的森林探險與鐘乳石洞咖啡。', icon: 'fas fa-tree', colorClass: 'text-green-700', type: 'outdoor' },
